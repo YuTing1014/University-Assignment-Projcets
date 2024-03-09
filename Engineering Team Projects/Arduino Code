@@ -1,0 +1,243 @@
+#include <Servo.h>
+
+//hole 1 ： metal 
+//hole 2 ： dry 
+//hole 3 ： wet 
+
+//Ultrasonic
+#define echoPin_1 10
+#define trigPin_1 9
+#define echoPin_2 23
+#define trigPin_2 22
+#define echoPin_3 42
+#define trigPin_3 40
+long duration1; 
+int distance1;
+long duration2; 
+int distance2;
+long duration3; 
+int distance3;
+
+//RBGLED
+int red_light_pin_1 = 13;
+int green_light_pin_1 = 12;
+int blue_light_pin_1 = 11;
+
+int red_light_pin_2 = 24;
+int green_light_pin_2 = 26;
+int blue_light_pin_2 = 28;
+
+int red_light_pin_3 = 39;
+int green_light_pin_3 = 41;
+int blue_light_pin_3 = 43;
+
+//Moisture Sensor
+int moist_sensor_1 = 27; 
+int moist_sensor_2 = 44; 
+
+//Servo motor
+Servo servo1; //8
+Servo servo2; //25
+Servo servo3; //38
+
+//Inductive Sensor
+int inductive_1 = 7; 
+int inductive_2 = 29;
+int inductive_3 = 45;
+int state= LOW;
+int inductive_value_1 = 0;
+int inductive_value_2 = 0;
+int inductive_value_3 = 0;
+
+//IR Sensor
+const int IRSensor_1 = A0;
+const int IRSensor_2 = A1;
+const int IRSensor_3 = A2;
+int IR_value_1 = 0;
+int IR_value_2 = 0;
+int IR_value_3 = 0;
+
+void RGB_color_1(int red_light_value, int green_light_value, int blue_light_value)
+{
+  analogWrite(red_light_pin_1, red_light_value);
+  analogWrite(green_light_pin_1, green_light_value);
+  analogWrite(blue_light_pin_1, blue_light_value);
+}
+
+void RGB_color_2(int red_light_value, int green_light_value, int blue_light_value)
+{
+  analogWrite(red_light_pin_2, red_light_value);
+  analogWrite(green_light_pin_2, green_light_value);
+  analogWrite(blue_light_pin_2, blue_light_value);
+}
+
+void RGB_color_3(int red_light_value, int green_light_value, int blue_light_value)
+{
+  analogWrite(red_light_pin_3, red_light_value);
+  analogWrite(green_light_pin_3, green_light_value);
+  analogWrite(blue_light_pin_3, blue_light_value);
+}
+
+void setup()
+{
+  //RBGLed
+  pinMode(red_light_pin_1, OUTPUT);
+  pinMode(green_light_pin_1, OUTPUT);
+  pinMode(blue_light_pin_1, OUTPUT);
+  pinMode(red_light_pin_2, OUTPUT);
+  pinMode(green_light_pin_2, OUTPUT);
+  pinMode(blue_light_pin_2, OUTPUT);
+  pinMode(red_light_pin_3, OUTPUT);
+  pinMode(green_light_pin_3, OUTPUT);
+  pinMode(blue_light_pin_3, OUTPUT);
+  RGB_color_1(255, 255, 255);
+  RGB_color_2(255, 255, 255);
+  RGB_color_3(255, 255, 255);
+  //Servo Motor
+  servo1.attach(8); 
+  servo1.write(0);
+  servo2.attach(25); 
+  servo2.write(0);
+  servo3.attach(38); 
+  servo3.write(0);
+  //Inductive Sensor
+  Serial.begin(9600);
+  pinMode(inductive_1,INPUT);
+  pinMode(inductive_2,INPUT);
+  pinMode(inductive_3,INPUT);
+  //Moisture Sensor
+  pinMode(moist_sensor_1, INPUT);
+  pinMode(moist_sensor_2, INPUT);
+  //IR Sensor 
+  pinMode (IRSensor_1, INPUT); 
+  pinMode (IRSensor_2, INPUT); 
+  pinMode (IRSensor_3, INPUT); 
+  //Utrasonic
+  pinMode(trigPin_1, OUTPUT);
+  pinMode(echoPin_1, INPUT); 
+  pinMode(trigPin_2, OUTPUT);
+  pinMode(echoPin_2, INPUT); 
+  pinMode(trigPin_3, OUTPUT);
+  pinMode(echoPin_3, INPUT); 
+  
+  Serial.begin(9600);
+  delay(2000);
+}
+
+void loop() 
+{
+  //hole 1
+  RGB_color_1(255, 255, 255);
+  digitalWrite(trigPin_1, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin_1, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin_1, LOW);
+  duration1 = pulseIn(echoPin_1, HIGH);
+  distance1 = duration1 * 0.034 / 2; 
+  Serial.println(distance1);
+  IR_value_1 = analogRead(IRSensor_1);
+  inductive_value_1 = digitalRead(inductive_1);
+  if(distance1 < 16)
+  {
+    Serial.println("METAL BIN STORAGE FULL!!");
+    RGB_color_1(0, 255, 255);
+  }
+  else if(IR_value_1 < 500 && inductive_value_1==0 && distance1 > 15)
+  {
+    Serial.println("THIS IS NOT METAL");
+    RGB_color_1(0, 255, 255);
+  }
+  else if(IR_value_1 < 500 && inductive_value_1==1 && distance1 > 15)
+  {
+    Serial.println("METAL DETECTED");
+    RGB_color_1(255, 0, 255);
+    servo1.write(80);
+    delay(1000);
+    servo1.write(0);
+    delay(500); 
+    RGB_color_1(255, 255, 255);
+    delay(500); 
+  }
+
+  //hole 2
+  RGB_color_2(255, 255, 255);
+  digitalWrite(trigPin_2, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin_2, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin_2, LOW);
+  duration2 = pulseIn(echoPin_2, HIGH);
+  distance2 = duration2 * 0.034 / 2; 
+
+  IR_value_2 = analogRead(IRSensor_2);
+  inductive_value_2 = digitalRead(inductive_2);
+  if(distance2 < 16)
+  {
+    Serial.println("DRY BIN STORAGE FULL!!");
+    RGB_color_2(0, 255, 255);
+  }
+  else if(inductive_value_2==0 && distance2 > 15)
+  {
+    Serial.println("METAL DETECTED");
+    RGB_color_2(0, 255, 255);
+  }
+  else if(IR_value_2 < 500 && inductive_value_2==1 && distance2 > 15 && digitalRead(moist_sensor_1) == 0)
+  {
+    Serial.println("WET NON-METAL DETECTED");
+    RGB_color_2(0, 255, 255);
+  }
+  else if(IR_value_2 < 500 && inductive_value_2==1 && distance2 > 15 && digitalRead(moist_sensor_1) == 1)
+  {
+    Serial.println("DRY NON-METAL DETECTED");
+    RGB_color_2(255, 0, 255);
+    servo2.write(80);
+    delay(1000);
+    servo2.write(0);
+    delay(500); 
+    RGB_color_2(255, 255, 255);
+    delay(500); 
+  }
+  
+  //hole 3
+  RGB_color_3(255, 255, 255);
+  digitalWrite(trigPin_3, LOW);
+  delayMicroseconds(2);
+  digitalWrite(trigPin_3, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(trigPin_3, LOW);
+  duration3 = pulseIn(echoPin_3, HIGH);
+  distance3 = duration3 * 0.034 / 2; 
+    
+  IR_value_3 = analogRead(IRSensor_3);
+  inductive_value_3 = digitalRead(inductive_3);
+  Serial.println(distance3);
+  Serial.println(inductive_value_3);
+  if(distance3 < 16)
+  {
+    Serial.println("WET BIN STORAGE FULL!!");
+    RGB_color_3(0, 255, 255);
+  }
+  else if(inductive_value_3==1 && distance3 > 15)  
+  {
+    Serial.println("METAL DETECTED");
+    RGB_color_3(0, 255, 255);
+  }
+  else if(IR_value_3 < 500 && inductive_value_1==0 && distance3 > 15 && digitalRead(moist_sensor_2) == 1)
+  {
+    Serial.println("DRY NON-METAL DETECTED");
+    RGB_color_3(0, 255, 255);
+  }
+  else if(IR_value_3 < 500 && inductive_value_1==0 && distance3 > 15 && digitalRead(moist_sensor_2) == 0)
+  {
+    Serial.println("WET NON-METAL DETECTED");
+    RGB_color_3(255, 0, 255);
+    servo3.write(80);
+    delay(1000);
+    servo3.write(0);
+    delay(500); 
+    RGB_color_3(255, 255, 255);
+    delay(500); 
+  }
+  delay(500); 
+}
