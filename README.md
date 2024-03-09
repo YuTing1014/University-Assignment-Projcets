@@ -1,2 +1,2 @@
-# University-Assignment-Projcets
+# University Assignment Projcets
 Projects Completed in Universiti Teknologi PETRONAS (UTP)
