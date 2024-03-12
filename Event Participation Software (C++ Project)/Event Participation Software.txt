@@ -1,0 +1,374 @@
+https://www.onlinegdb.com/b_89BUxrFE
+
+/***************************************************************
+Project ADS Jan 21 Semester
+
+Team Members : 
+
+  TAN HON CHI          TAN YU TING             RAYAN ROY
+  19000788             19000505                19000652
+  COE                  COE                     COE 
+***************************************************************/
+
+#include <stdio.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <vector>
+using namespace std;
+
+#include "Event.h"
+#include "All_string_related.h"
+#include "linkedList.h"
+#include "Queue.h"
+#include "BST.h"
+#include "Graph.h"
+
+int main()
+{
+    event participants;
+    Participant *newptr = new Participant;
+    linked_list obj1;
+    All_string_related obj;
+    Queue q1;
+    //BST t;
+    Graph g;
+    
+    int n=0;
+    cout << "REMEMBER TO SAVE YOUR DATA INPUT IN FILE USING [CASE 13] IF NOT YOUR BIODATA WILL DISAPPEAR !!!" << endl;
+    cout << "SAVE THE DATA ONLY WHEN YOU FINISH INPUT AND EDIT YOUR DATA, DATA IN FILE CANNOT BE EDIT ANYMORE !!!" << endl;
+    cout << "\nPlease enter operation" << endl;
+    cout << "-1 : Exit the program" << endl;
+    cout << "0  : Insert new Participants to the list" << endl;
+    cout << "1  : Print the list of participant" << endl;
+    cout << "2  : Find the position of participant using id" << endl; 
+    cout << "3  : Delete the participant using position" << endl;
+    cout << "4  : Delete the participant using id" << endl;
+    cout << "5  : Edit the data of Participant" << endl;
+    cout << "6  : Print Organizers' information" << endl;
+    cout << "7  : Feedback for this event"<< endl;
+    cout << "8  : Event description" << endl;
+    cout << "9  : Lucky Number" << endl;
+    cout << "10 : Bubble sort"  << endl;
+    cout << "11 : Insert Time Taken for marathon" << endl;
+    cout << "12 : Save Time Taken for marathon in File" << endl;
+    cout << "13 : Participants taken event T-shirt [using Queue] " <<endl;
+    cout << "14 : Save Biodata in File" << endl;
+    cout << "15 : Bubblesort and QuickSort for ID (animation data)" << endl;
+    cout << "16 : Search Available ID using BST" << endl;
+    cout << "17 : FunRun & Marathon checkpoints route (Graph) " << endl;
+    
+    while (true) 
+    {
+        int op;
+        
+        cout << "\nEnter Your Choice : ";
+        cin >> op;
+        switch (op) 
+        {
+            case -1: exit(1);
+                    break;
+            
+            case 0: {
+                        int id,indexs,age;
+                        string name,mail,contact;
+                        
+                        cout << "\nEnter name" << endl;
+                        cin.ignore(100,'\n');   // skips up to 100 characters and stop after it finds and "grabs" \n
+                        getline(cin,name,'\n');
+                        obj.uppercase(name);
+                        
+                        
+                        cout << "\nEnter age" << endl;
+                        cin >> age;
+                        
+                        cout << "\nEnter id" << endl;
+                        cin >> id;
+                        
+                        cout << "\nEnter mail" << endl;
+                        cin>> mail;
+                        
+                        cout << "\nEnter contact (Eg : +601X-XXX XXXX)" << endl;
+                        cin.ignore(100,'\n');   
+                        getline(cin,contact,'\n');
+                        
+                        obj1.insertParticipant(*&newptr,id,age,name,contact,mail);
+                    }
+                    break;
+                    
+            case 1:{
+                        obj1.display_linkedlist(*&newptr);
+                   }
+                   break;
+                   
+            case 2:{
+                        int id;
+                        cout << "\nPlease enter your id number to find the position" <<endl;
+                        cin >> id;
+                        obj1.find(id);
+                   }
+                   break;
+                   
+            case 3: {
+                        int index;
+                        cout << "\nPlease enter your position number (NO) to delete all the data" <<endl;
+                        cin >> index;
+                        obj1.remove_position(index);
+                        n--;
+                    }
+                    break;
+                    
+            case 4:{
+                        int id;
+                        cout << "\nPlease enter your id number to delete your data the position" <<endl;
+                        cin >> id;
+                        obj1.remove_id(id);
+                    }
+                    break; 
+                    
+            case 5:{
+                        // this abt the user enter wrong details  one of the array 
+                        // so we want to replace it with correct information 
+                        cout << "Do you want to edit on  your biodata  : " << endl;
+                        cout << "NAME [1] , AGE[2] , MAIL[3] CONTACT[4] , ID[5] : " << endl;
+                        int option;
+                        cin >> option;
+                        cout << "PLEASE CHOOSE YOUR POSITION (starting from 1) : " <<endl;
+                        int index;
+                        cin >> index;
+                        if(option ==1)
+                        {
+                            cout << "please enter NAME " << endl;
+                            string edit;
+                            cin.ignore(100,'\n');   
+                            getline(cin,edit,'\n');
+                            obj1.edit_string(edit,index,1);
+                            
+                        }
+                        if(option ==2)
+                        {
+                            cout << "please enter AGE " << endl;
+                            int edit;
+                            cin >> edit;
+                            obj1.edit_int(edit,index,2);
+                        }
+                        if(option == 3)
+                        {
+                            cout << "please enter MAIL " << endl;
+                            string edit;
+                            cin >> edit;
+                            obj1.edit_string(edit,index,3);
+                        }
+                        if( option ==4)
+                        {
+                            cout << "please enter CONTACT (Eg : +601X-XXX XXXX) " << endl;
+                            string edit;
+                            cin.ignore(100,'\n');   
+                            getline(cin,edit,'\n');
+                            obj1.edit_string(edit,index,4);
+                        }
+                        if( option ==5)
+                        {
+                            cout << "please enter ID " << endl;
+                            int edit;
+                            cin >> edit;
+                            obj1.edit_int(edit,index,5);
+                        }
+                   }
+                   break;
+                   
+            case 6:{
+                        obj.organizerInfo();
+                   }
+                   break;
+            
+            case 7:{
+                        string name, suggestion, satisfaction_in_word; 
+                        int satisfaction_in_num;
+                        
+                        obj.feedback(name, satisfaction_in_num, suggestion, satisfaction_in_word); // NO n
+                        
+                        //obj.feedback(name, satisfaction, suggestion, n);
+                        //n++;
+                   }
+                   break;
+            
+            case 8:{
+                        string options;
+                        do{
+                            cout<<"Frequently asked question : " << endl;
+                            cout<<"press [1]    : What is this event about?" << endl;
+                            cout<<"press [2]    : Date, time and venue of the event." << endl;
+                            cout<<"press [3]    : The event activities and the fees to join the event." << endl;
+                            cout<<"press [4]    : Is the food included for the participants?" << endl;
+                            cout<<"press [5]    : Gifts for participants." << endl; 
+                            cout<<"press [6]    : Merchandise Sale." << endl; 
+                            cout<<"press [7]    : Prizes of the event." << endl; 
+                            cout<<"\nRules and Regulations : " << endl;
+                            cout<<"press [8]    : Participation Requirements." << endl;
+                            cout<<"press [9]    : Registration Method." <<endl; 
+                            cout<<"press [10]   : Competition Rules." <<endl;
+                            cout<<"press [11]   : Responsibilities and Disqualification." <<endl; 
+                            cout<<"\npress [Q]    : EXIT " << endl; 
+                            cin >> options;
+                            obj.Frequently_asked_question(options);
+                            
+                        }while(options !="Q" && options !="q");
+                        
+                    }
+                    break;
+                    
+            case 9:{
+                        obj1.convertArr();
+                        string *nameS = obj1.getName();//when after press case 9 den only press 10
+                        int size2 = obj1.getSize();
+                        //cout << "LUCKY NUMBER IS " <<endl;
+                        participants.lucky_number(nameS,size2);
+                    }
+                    break;
+                   
+            case 10:{
+                        obj1.bubbleSort();
+                    }
+                    break;
+                    
+            case 11:{
+                        float t;
+                        int num, id, k;
+                        string na;
+                        obj1.convertArr();
+                        string temp[1000];
+                        string *nameS = obj1.getName();
+                            
+                        int *ids = obj1.getids();
+                        int size2 = obj1.getSize(); 
+                        
+                        int i;
+                        cout << "Enter Your ID  : ";
+                        cin  >> id;
+                        for(i=0 ; i<size2 ;i++)
+                        {
+                            if(ids[i] == id)
+                            {
+                                k=i;
+                                na=nameS[k];
+                                cout << "Enter The Time Taken For Your Race : ";
+                                cin  >> t;
+                                participants.insert(t,na);
+                                break;
+                            }
+                        }
+                        if(ids[i]!=id)
+                            cout << "ID not found" << endl;
+                        //temp[n]=nameS[k];
+                        ///cout << temp[n] <<endl;
+                        
+                    }
+                    break;
+                    
+            case 12:{
+                        participants.savetimefile();
+                    }
+                    break;
+                    
+            case 13:{
+                        obj1.convertArr();
+                        string *nameQ = obj1.getName();
+                        int sizeQ = obj1.getSize();
+                        for(int i=0; i<sizeQ; i++) //input all the names in linked list into queue
+                        {
+                            q1.enQueue(nameQ[i]);
+                        }
+                        cout << "Starting from first of the list, how many people have taken their T-shirt for event :  " << endl;
+                        int num;
+                        cin >> num;
+                        for(int j=0; j<num; j++)
+                        {
+                            q1.deQueue();
+                        }
+                        q1.displayQueue();
+                    }
+                    break;
+                    
+            case 14:{
+                        obj1.savefile_linkedlist();
+                    }
+                    break;
+                    
+            case 15:{
+                        obj1.convertArr();
+                        string *nameS = obj1.getName();
+                        int *ids = obj1.getids();
+                        int size2 = obj1.getSize(); 
+                        participants.bubble_id(nameS,ids,size2);
+                        
+                        fstream Quicksort_data; 
+                        Quicksort_data.open("Quicksort_data.txt");
+                        for (int i = 0; i < size2; i++) 
+                            Quicksort_data << ids[i] << " ";  
+                        Quicksort_data << endl;
+                        participants.quickSort_id(Quicksort_data,ids,size2,0,size2 - 1);
+                        Quicksort_data.close();
+                    }
+                    break;
+            case 16:{
+                    
+                        obj1.convertArr();
+                        int *ids = obj1.getids();
+                        int size2 = obj1.getSize(); 
+                    	BstNode* root = NULL; 
+                    	for(int i =0 ; i<size2 ;i++)
+                    	{
+                    	    root = Insert(root,ids[i]);	
+                    	}
+                    	int number;
+                    	cout<<"Enter number be searched\n";
+                    	cin>>number;
+                    
+                    	if(Search(root,number) == true) cout<<"Found\n";
+                    	else cout<<"Not Found\n";
+                    }
+                    break;
+                    
+            case 17:{
+                        cout << "There are 3 checkpoints for FUNRUN & 5 checkpoints for MARATHON : \n" << endl;
+                        int V = 5;
+                        vector<pair<int, int>> adj[V];
+                        g.addEdge(adj, 0, 1, 5);
+                        g.addEdge(adj, 0, 2, 2);
+                        g.addEdge(adj, 1, 2, 4);
+                        g.addEdge(adj, 2, 3, 4);
+                        g.addEdge(adj, 2, 4, 3);
+                        g.addEdge(adj, 3, 4, 6);
+                        g.addEdge(adj, 4, 0, 2);
+                        g.printGraph(adj, V);
+                        cout << "Marathon : 1 > 2 > 3 > 4 > 5 > 1  (21km) "<< endl;
+                        cout << "Fun Run : 1 > 3 > 5 > 1  (7km) "<< endl;
+                    }
+                    
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
